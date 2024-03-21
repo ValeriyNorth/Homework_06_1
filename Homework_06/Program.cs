@@ -36,7 +36,7 @@ namespace Homework_06
             /// Если файл не существует, то сразу переходим в режим записи, не спрашивая о печати содержимого
             if (!File.Exists(path_data))
             {
-                WriteMyDate(path_data, atag, aval);
+                WriteMyDate(path_data, atag, aval, false);
             }
             else
             {
@@ -61,7 +61,7 @@ namespace Homework_06
                         case '2':
                             {
                                 Console.WriteLine(" Режим ввода сотрудников");
-                                WriteMyDate(path_data, atag, aval);
+                                WriteMyDate(path_data, atag, aval, true);
                                 break;
                             }
                     }
@@ -78,11 +78,16 @@ namespace Homework_06
 
          }
 
-        static void WriteMyDate(string path_data, string[] atag, string[] aval)
+        static void WriteMyDate(string path_data, string[] atag, string[] aval, bool flag)
         {
             //Console.WriteLine(path_data);
             string InFile = "";
-            int count = File.ReadAllLines(path_data).Length;
+            int count = 0;
+            if (flag)
+            {
+                count = File.ReadAllLines(path_data).Length;
+            }
+            
             DateTime dateTime = DateTime.Now;
             aval[0] = Convert.ToString(count+1); aval[1] = Convert.ToString(dateTime);
             for (int i = 2; i < atag.Length; i++)
@@ -96,7 +101,8 @@ namespace Homework_06
             for (int i = 0; i < atag.Length; i++)
             {
                 Console.WriteLine(atag[i] + aval[i]);
-                string v = (i != atag.Length) ? (InFile += atag[i] + aval[i] + '#') : (InFile += atag[i] + aval[i]);
+                //string v = (i != atag.Length) ? (InFile += atag[i] + aval[i] + '#') : (InFile += atag[i] + aval[i]);
+                string v = (i != atag.Length) ? (InFile += aval[i] + '#') : (InFile += aval[i]);
             }
             Console.WriteLine("\nСохранить? - y(Да) / n(Нет)");
             rkey = Console.ReadKey();
@@ -122,7 +128,7 @@ namespace Homework_06
                     break;
                 }
             }
-            while ((rkey.KeyChar != 'y') || (rkey.KeyChar != 'n') || (rkey.KeyChar != 'д') || (rkey.KeyChar != 'н'));
+            while ((rkey.KeyChar != 'y') && (rkey.KeyChar != 'n') && (rkey.KeyChar != 'д') && (rkey.KeyChar != 'н'));
             Console.ReadLine();
         }
 
@@ -131,11 +137,20 @@ namespace Homework_06
             using (StreamReader sr = new StreamReader(path_data))
             {
                 //string text = sr.ReadToEnd();
+                Console.WriteLine($" {"ID: ".PadLeft(10)} {"Дата и время добавления записи: ".PadLeft(25)} {"Ф. И. О. ".PadLeft(45)} {"Возраст: ".PadLeft(5)} {"Рост: ".PadLeft(5)} {"Дата рождения: ".PadLeft(10)} {"Место рождения: ".PadLeft(25)}  ");          
+                
                 string line = "";
                 while ((line = sr.ReadLine()) != null)
                 {
-                    Console.WriteLine(line);
+                    string[] words = line.Split('#');
+                    Console.WriteLine($" {words[0].PadLeft(10)} {words[1].PadLeft(25)} {words[2].PadLeft(45)} {words[3].PadLeft(5)} {words[4].PadLeft(5)} {words[5].PadLeft(10)} {words[6].PadLeft(25)}  ");
 
+                    //    for (int i = 0; i < words.Length; i++)
+                    //    {
+                    //        Console.Write(line[i]);
+                    //    }
+                    //}
+                   
                 }
                 Console.ReadLine();
             }
